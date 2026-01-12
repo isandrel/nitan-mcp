@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - custom
 
 jobs:
   lint:
@@ -12,15 +13,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install
-      - run: pnpm typecheck
-      - run: pnpm build
-      - run: pnpm test
+          bun-version: latest
+      - run: bun install
+      - run: bun run typecheck
+      - run: bun run build
+      - run: bun test
 
   publish:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -29,14 +28,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install
-      - run: pnpm typecheck
-      - run: pnpm build
+          bun-version: latest
+      - run: bun install
+      - run: bun run typecheck
+      - run: bun run build
       - name: Publish package
         uses: JS-DevTools/npm-publish@v3
         with:
